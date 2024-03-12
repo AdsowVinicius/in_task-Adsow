@@ -1,0 +1,23 @@
+package com.in_list.adsow.controllers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.in_list.adsow.task.DataRegisTertask;
+import com.in_list.adsow.task.TaskRepository;
+
+
+@RestController
+@RequestMapping("/tasks")
+public class TaskController {
+	@Autowired
+	private TaskRepository repository;
+	@PostMapping
+	public void register(@RequestBody DataRegisTertask data){
+		repository.save(new Task(data));
+	}
+
+}

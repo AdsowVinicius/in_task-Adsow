@@ -1,0 +1,8 @@
+package com.in_list.adsow.task;
+
+public class Task {
+	private long id;
+	private String name_task;
+	private String description;
+	private Status status;
+}

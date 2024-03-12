@@ -1,0 +1,5 @@
+package com.in_list.adsow.task;
+
+public record DataUploudTask() {
+
+}

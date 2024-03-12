@@ -1,0 +1,8 @@
+package com.in_list.adsow.task;
+
+public record DataRegisterTask(
+		String name_task,
+		String description,
+		Status status) {
+
+}
