@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Aplicativo Spring Boot</title>
+</head>
+<body>
+    <h1>Bem-vindo ao Meu Aplicativo Spring Boot</h1>
+    <p th:text="${mensagem}"></p>
+</body>
+</html>

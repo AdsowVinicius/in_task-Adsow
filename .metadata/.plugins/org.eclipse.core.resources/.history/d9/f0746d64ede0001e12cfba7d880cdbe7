@@ -1,0 +1,15 @@
+package com.in_list.adsow.controllers;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@@Controller <i class="conum" data-value="1"></i><b>(1)</b>
+public class HomeController {
+
+	@RequestMapping(value = "/") <i class="conum" data-value="2"></i><b>(2)</b>
+	public String index() {
+		return "index"; <i class="conum" data-value="3"></i><b>(3)</b>
+	}
+
+}
