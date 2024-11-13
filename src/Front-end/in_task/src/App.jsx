@@ -1,57 +1,85 @@
-import { useEffect, useState } from "react"
-import Formulario from "./formulario"
-import Tabela from "./tabela"
-import './app.css'
-
+import { useEffect, useState } from "react";
+import Formulario from "./Formulario"; // Verifique se o nome do arquivo está correto
+import Tabela from "./Tabela"; // Verifique se o nome do arquivo está correto
+import './app.css';
 
 function App() {
-  //obj task
-  const task = {
-    id : 0,
-    name_task : '',
-    description :'',
-    status : ''
-
-  }
-  //use state
-  const [btnRegister, setBtnRegister] = useState(true);
   const [tasks, setTasks] = useState([]);
-  const [objTask, setObjTasks] = useState(task);
+  const [selectedTask, setSelectedTask] = useState(null); // Estado para a tarefa selecionada
 
-  //useEffect
-  useEffect(()=>{
-    fetch("http://localhost:8080/tasks  ")
-    .then(retorno => retorno.json())
-    .then(data => {setTasks(data)})
-  },[]);
-  
-  // obtendo dados do formulario
-  const aoDigitar = (e) => {
-    console.log(e.target);
-    setObjTasks({...objTask, [e.target.name]: e.target.value});
-  }
-  const register = () =>{
-    fetch("http://localhost:8080/tasks ",{
-      method: 'post',
-      body: JSON.springify(objTask),
-      headers:{
-        'Content-type': 'applincation/json',
-        'Accept':'applincation/json'
+  const getTasks = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/tasks", {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Erro ao buscar tarefas');
       }
-    })
-    .then(retorno=> retorno.json)
-    .then(retorno_convertido=> {
-      console.log(retorno_convertido);
-    })
-  }
+      const tasksList = await response.json();
+      setTasks(tasksList);
+    } catch (error) {
+      console.error("Erro ao buscar tarefas:", error);
+    }
+  };
 
-  return(
+  useEffect(() => {
+    getTasks();
+  }, []);
+
+  const onAddTask = async (taskData) => {
+    try {
+      const response = await fetch("http://localhost:8080/tasks", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData)
+      });
+      if (!response.ok) {
+        throw new Error('Erro ao adicionar tarefa');
+      }
+      getTasks(); // Atualiza a lista de tarefas
+    } catch (error) {
+      console.error("Erro ao adicionar tarefa:", error);
+    }
+  };
+
+  const onUpdateTask = async (taskData) => {
+    try {
+      const response = await fetch(`http://localhost:8080/tasks/${taskData.id}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData)
+      });
+      if (!response.ok) {
+        throw new Error('Erro ao atualizar tarefa');
+      }
+      getTasks(); // Atualiza a lista de tarefas
+      setSelectedTask(null); // Limpa a seleção após a atualização
+    } catch (error) {
+      console.error("Erro ao atualizar tarefa:", error);
+    }
+  };
+
+  const onSelectTask = (task) => {
+    setSelectedTask(task); // Define a tarefa selecionada
+  };
+
+  return (
     <div>
-      <p>{JSON.stringify(objTask)}</p>
-      <Formulario botao={btnRegister} eventoTeclado ={aoDigitar} register ={register}/>
-      <Tabela vetor = {tasks}/>
+      <Formulario 
+        onAddTask={onAddTask} 
+        onUpdateTask={onUpdateTask} 
+        selectedTask={selectedTask} // Passa a tarefa selecionada para o formulário
+      />
+      <Tabela tasks={tasks} onSelectTask={onSelectTask} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

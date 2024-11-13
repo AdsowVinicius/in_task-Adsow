@@ -1,28 +1,32 @@
-function Tabela({vetor}){
-    return (
-        <table className="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Tarefa</th>
-                    <th>descrição</th>
-                    <th>Status</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                { vetor.map((obj, indice) => (
-                                <tr key ={indice}>
-                                    <td>{indice+1}</td>
-                                    <td>{obj.name_task}</td>
-                                    <td>{obj.description}</td>
-                                    <td>{obj.status}</td>
-                                    <td><button className="btn btn-success">selecionar</button></td>
-                                </tr>
-                ))}
-            </tbody>
-        </table>
-    )
+function Tabela({ tasks, onSelectTask }) {
+  return (
+    <table className="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tarefa</th>
+          <th>Descrição</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tasks.map((task) => (
+          <tr key={task.id}>
+            <td>{task.id}</td>
+            <td>{task.name_task}</td>
+            <td>{task.description}</td>
+            <td>{task.status}</td>
+            <td>
+              <button className="btn btn-success" onClick={() => onSelectTask(task)}>
+                Selecionar
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 export default Tabela;

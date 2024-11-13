@@ -22,8 +22,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -40,15 +39,15 @@ public class TaskController {
 	public List<DataListTask> listar(){
 		return repository.findAll().stream().map(DataListTask :: new).toList();
 	}
-	
-	@PutMapping
+
+	@PutMapping("/{id}") // Adicionando o id ao mapeamento
 	@Transactional
-	public void update(@RequestBody @Valid DataUpdateTask data){
-		var task = repository.getReferenceById(data.id());
+	public void update(@PathVariable Long id, @RequestBody @Valid DataUpdateTask data) {
+		var task = repository.getReferenceById(id);
 		task.updateStatus(data);
 	}
-	
-	
+
+
 	@GetMapping("/{id}")
 	public ResponseEntity<DataListTask> detail(@PathVariable long id) {
 		var task = repository.getReferenceById(id);
